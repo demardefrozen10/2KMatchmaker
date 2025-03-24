@@ -1,0 +1,6 @@
+@_2K_Matchmaker_HostAddress = http://localhost:5175
+
+GET {{_2K_Matchmaker_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
