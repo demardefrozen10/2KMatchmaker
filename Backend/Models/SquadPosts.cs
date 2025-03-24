@@ -19,6 +19,9 @@ namespace _2K_Matchmaker.Models
 
         public required String Message { get; set; }
 
+        public required User User { get; set; }
+
+        public required Guid UserId { get; set; }
 
     }
 }
