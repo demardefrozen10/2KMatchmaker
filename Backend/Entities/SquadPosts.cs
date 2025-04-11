@@ -21,6 +21,8 @@ namespace _2K_Matchmaker.Models
 
         public DateTime createdAt { get; set; }
 
+        public required int playersNeeded { get; set; }
+
 
     }
 }

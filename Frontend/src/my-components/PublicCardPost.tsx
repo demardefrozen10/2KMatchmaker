@@ -12,7 +12,7 @@ import { format, parseISO } from "date-fns";
 
 
   export default function PublicCardPost(props: CardProps) {
-    const formattedDate = format(parseISO(props.createdAt), "MMM d, yyyy 'at' h:mm a");
+    const formattedDate = format(parseISO(props.datePosted), "MMM d, yyyy 'at' h:mm a");
 
     return (
       <>

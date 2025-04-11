@@ -60,7 +60,7 @@ export default function CardPost(props: CardProps) {
 
   return (
     <>
-        <Card className="w-xs max-w-sm ml-1 shadow-lg border-2 border-gray-100 hover:shadow-xl transition-shadow duration-300 h-100">
+        <Card className="w-xs max-w-sm ml-1 shadow-lg border-2 border-gray-100 hover:shadow-xl transition-shadow duration-300 h-110">
       <CardHeader className="bg-red-50 pb-2">
         <CardTitle className="text-xl font-bold text-gray-800 m-auto mt-2">Looking for {props.gameMode} game</CardTitle>
         <CardDescription className="text-gray-500"></CardDescription>

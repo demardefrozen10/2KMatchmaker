@@ -12,5 +12,7 @@
 
         public required string Username { get; set; }
 
+        public int playersNeeded { get; set; }
+
     }
 }

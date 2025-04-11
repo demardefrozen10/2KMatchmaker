@@ -103,7 +103,7 @@ export default function Dashboard() {
                   gamertag2K={post.gamertag2K}
                   postId={post.postId}
                   handleRefreshPosts={() => handleRefreshPosts()}
-                  createdAt={post.createdAt}
+                  datePosted={post.datePosted}
                 />
               ))}
             </div>

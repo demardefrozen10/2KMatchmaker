@@ -19,9 +19,9 @@ namespace _2K_Matchmaker.Controllers
         }
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAllPosts()
-        {
-            var posts = await _queryRepo.GetAllSquadPosts();
+        public async Task<IActionResult> GetAllPosts(String? gameMode, String? platform) { 
+        
+            var posts = await _queryRepo.GetAllSquadPosts(gameMode, platform);
             if (posts == null)
             {
                 return NoContent();

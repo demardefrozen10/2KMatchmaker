@@ -20,7 +20,8 @@ import {
   UserIcon, 
   MessageSquareIcon, 
   KeyRoundIcon,
-  Award
+  Award,
+  Eye
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import useFetch from "../Hooks/useFetch";
@@ -38,13 +39,11 @@ import {useState} from "react";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
@@ -60,8 +59,8 @@ const formSchema = z.object({
   position: z.string({
     required_error: "Please select the build you're looking for"
   }),
-  build: z.string({
-    required_error: "Please select your build"
+  playersNeeded: z.number({
+    required_error: "Please select the number of players you're looking for"
   }),
   gamertag: z.string()
     .min(3, { message: "Gamertag must be at least 3 characters" })
@@ -83,7 +82,6 @@ export default function CreatePost() {
       platform: "",
       winPercentage: "",
       position: "",
-      build: "",
       gamertag: "",
       message: "",      
     },
@@ -93,7 +91,7 @@ export default function CreatePost() {
     try {
       const { post } = useFetch("https://localhost:7170/api/SquadPost/");
       post("savePost", {GameMode: values.gameMode, Platform: values.platform, WinPercentage: values.winPercentage, Gamertag2K:
-        values.gamertag, Message: values.message, Username: localStorage.getItem("username")
+        values.gamertag, Message: values.message, Username: localStorage.getItem("username"), playersNeeded: values.playersNeeded
       }).then(() => {
         setIsPostSuccess(true);
     })
@@ -139,7 +137,7 @@ export default function CreatePost() {
                     <FormControl>
                       <Select 
                         onValueChange={field.onChange} 
-                        defaultValue={field.value}
+                        defaultValue={String(field.value)}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select Game Mode" />
@@ -204,6 +202,36 @@ export default function CreatePost() {
         </FormItem>
         )}
         />
+          <FormField
+                control={form.control}
+                name="playersNeeded"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                    <Eye />How many players are you looking for?
+                    </FormLabel>
+                    <FormDescription>
+                      If you don't have anyone waiting with you, that's fine!
+                    </FormDescription>
+                    <FormControl>
+                    <Select 
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select number of players you're looking for" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[1, 2, 3, 4, 5].map(count => (
+                            <SelectItem key={count} value={count.toString()}>{count}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

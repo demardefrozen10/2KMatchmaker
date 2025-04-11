@@ -3,16 +3,34 @@ import { useEffect, useState } from "react";
 import PublicCardPost from "@/my-components/PublicCardPost";
 import { CardProps } from "@/my-components/CardPost";
 import { Slider } from "@/components/ui/slider"
+
+interface FilterParams {
+    gameMode?: string;
+    platform?: string;
+    build?: string;
+    minWinPercentage?: number;
+  }
+
 export default function PostPortal() {
     const [isLoading, setIsLoading] = useState(true);
         const [posts, setPosts] = useState<CardProps[]>([]);
         const [minWinPercentage, setMinWinPercentage] = useState(33);
+        const [gameMode, setGameMode] = useState("");
+        const [platform, setPlatform] = useState("");
+        const [build, setBuild] = useState("");
 
 
-    const fetchAllPosts = () => {
+    const fetchAllPosts = (filters?: FilterParams) => {
         const {get} = useFetch("https://localhost:7170/api/SquadPost/");
         try {
-          get("").then((data: CardProps[]) => {
+        const queryParams = new URLSearchParams();
+        if (filters?.gameMode) queryParams.append("gameMode", filters.gameMode);
+        if (filters?.platform) queryParams.append("platform", filters.platform);
+        if (filters?.build) queryParams.append("build", filters.build);
+        if (filters?.minWinPercentage) queryParams.append("minWinPercentage", filters.minWinPercentage.toString());
+        const queryString = queryParams.toString();
+        const endpoint = queryString ? `?${queryString}` : "";
+          get(`${endpoint}`).then((data: CardProps[]) => {
           setPosts(data);
           setIsLoading(false);
         })
@@ -42,7 +60,7 @@ export default function PostPortal() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Game Mode
                         </label>
-                        <select className="w-full p-2 border rounded-md">
+                        <select className="w-full p-2 border rounded-md" onChange={(e) => setGameMode(e.target.value)}>
                             <option value="">All Modes</option>
                             <option value="Rec">Rec</option>
                             <option value="Park">Park</option>
@@ -57,7 +75,7 @@ export default function PostPortal() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Platform
                         </label>
-                        <select className="w-full p-2 border rounded-md">
+                        <select className="w-full p-2 border rounded-md" onChange={(e) => setPlatform(e.target.value)}>
                             <option value="">All Platforms</option>
                             <option value="PS5">PS5</option>
                             <option value="Xbox">Xbox Series X/S</option>
@@ -71,7 +89,7 @@ export default function PostPortal() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Build
                         </label>
-                        <select className="w-full p-2 border rounded-md">
+                        <select className="w-full p-2 border rounded-md" onChange={(e) => setBuild(e.target.value)}>
                             <option value="">All Builds</option>
                             <option value="PG">PG</option>
                             <option value="SG">SG</option>
@@ -88,7 +106,7 @@ export default function PostPortal() {
                         <Slider defaultValue={[33]} max={100} step={1} onValueChange={(value) => setMinWinPercentage(value[0])}/>
                     </div>
 
-                    <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                    <button onClick={() => fetchAllPosts({gameMode, platform, build, minWinPercentage})} className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
                         Apply Filters
                     </button>
                 </div>
@@ -110,7 +128,7 @@ export default function PostPortal() {
                                         message={post.message}
                                         gamertag2K={post.gamertag2K}
                                         postId={post.postId}
-                                        createdAt={post.createdAt}
+                                        datePosted={post.datePosted}
                                     />
                                 ))}
                             </div>

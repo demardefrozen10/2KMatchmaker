@@ -26,24 +26,18 @@ namespace _2K_Matchmaker.CommandRepos
 
             if (userId == null) return null;
 
-            var squadPost = new SquadPosts
-            {
-                GameMode = post.GameMode,
-                Platform = post.Platform,
-                WinPercentage = post.WinPercentage,
-                Gamertag2K = post.Gamertag2K,
-                Message = post.Message,
-                UserId = userId.Id,
-                User = userId,
-                PostId = Guid.NewGuid(),
-                createdAt = DateTime.UtcNow
-            };
+            var mappedPost = _mapper.Map<SquadPosts>(post);
 
-            await _context.Posts.AddAsync(squadPost);
+            mappedPost.User = userId;
+            mappedPost.UserId = userId.Id;
+            mappedPost.PostId = Guid.NewGuid();
+            mappedPost.createdAt = DateTime.UtcNow;
+
+            await _context.Posts.AddAsync(mappedPost);
             await _context.SaveChangesAsync();
 
             
-            return _mapper.Map<ReadPost>(post);
+            return _mapper.Map<ReadPost>(mappedPost);
         }
 
         public async Task<bool> DeletePost(Guid postId)

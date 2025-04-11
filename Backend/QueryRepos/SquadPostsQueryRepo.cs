@@ -14,13 +14,29 @@ namespace _2K_Matchmaker.QueryRepos
             _context = context;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<SquadPosts>> GetAllSquadPosts()
+        public async Task<IEnumerable<ReadPost>> GetAllSquadPosts(string? gameMode, string? platform)
         {
             var since = DateTime.UtcNow.AddHours(-24);
-            return await _context.Posts
-                                 .Where(p => p.createdAt >= since)
-                                 .ToListAsync();
+
+            var query = _context.Posts
+                .Include(p => p.User)
+                .Where(p => p.createdAt >= since)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(gameMode))
+                query = query.Where(p => p.GameMode.ToLower() == gameMode.ToLower());
+
+            if (!string.IsNullOrWhiteSpace(platform))
+                query = query.Where(p => p.Platform.ToLower() == platform.ToLower());
+
+
+            var posts = await query.ToListAsync();
+
+            var mappedPosts = _mapper.Map<IEnumerable<ReadPost>>(posts);
+
+            return mappedPosts;
         }
+
 
 
         public async Task<IEnumerable<ReadPost>?> GetSquadPostByUsername(string username)
