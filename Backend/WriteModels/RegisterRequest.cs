@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace _2K_Matchmaker.Models
+namespace _2K_Matchmaker.WriteModels
 {
     public class RegisterRequest : IAuthRequest
     {

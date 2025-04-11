@@ -1,9 +1,9 @@
-﻿using _2K_Matchmaker.Models;
+﻿using _2K_Matchmaker.WriteModels;
 using Azure.Core;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
-using LoginRequest = _2K_Matchmaker.Models.LoginRequest;
+using LoginRequest = _2K_Matchmaker.WriteModels.LoginRequest;
 
 
 namespace _2K_Matchmaker.Controllers
@@ -21,9 +21,13 @@ namespace _2K_Matchmaker.Controllers
         }
 
         [HttpPost("createAccount")]
-        public async Task<IActionResult> CreateAccount([FromBody] Models.RegisterRequest request)
+        public async Task<IActionResult> CreateAccount([FromBody] WriteModels.RegisterRequest request)
         {
             var user = await _commandRepo.CreateUser(request);
+            if (user == null)
+            {
+                return BadRequest();
+            }
             return CreatedAtAction(nameof(CreateAccount), user);
         }
 

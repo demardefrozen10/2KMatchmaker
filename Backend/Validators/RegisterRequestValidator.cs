@@ -1,5 +1,5 @@
 ﻿using _2K_Matchmaker.Database;
-using _2K_Matchmaker.Models;
+using _2K_Matchmaker.WriteModels;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;

@@ -1,17 +1,17 @@
 ﻿using _2K_Matchmaker.ICommandRepos;
-using _2K_Matchmaker.Models;
+using _2K_Matchmaker.WriteModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _2K_Matchmaker.Controllers
 {
     [ApiController]
-    [Route("api/2KMatchmakerPost")]
-    public class _2KMatchmakerPostController: ControllerBase
+    [Route("api/SquadPost")]
+    public class SquadPostController : ControllerBase
     {
         private readonly ISquadPostsQueryRepo _queryRepo;
         private readonly ISquadPostsCommandRepo _commandRepo;
 
-        public _2KMatchmakerPostController(ISquadPostsQueryRepo queryRepo, ISquadPostsCommandRepo commandRepo)
+        public SquadPostController(ISquadPostsQueryRepo queryRepo, ISquadPostsCommandRepo commandRepo)
         {
             _queryRepo = queryRepo;
             _commandRepo = commandRepo;
@@ -29,9 +29,22 @@ namespace _2K_Matchmaker.Controllers
             return Ok(posts);
         }
 
+        [HttpGet("{username}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetPostByUsername([FromRoute] string username)
+        {
+            var posts = await _queryRepo.GetSquadPostByUsername(username);
+            if (posts == null)
+            {
+                return NoContent();
+            }
+            return Ok(posts);
+
+        }
+
         [HttpPost("savePost")]
         [ProducesResponseType(201)]
-        public async Task<IActionResult> SavePost([FromBody] SquadPosts newPost)
+        public async Task<IActionResult> SavePost([FromBody] CreatePost newPost)
         {
             var savePost = await _commandRepo.CreatePost(newPost);
 
@@ -40,16 +53,16 @@ namespace _2K_Matchmaker.Controllers
                 return NoContent();
             }
 
-            return CreatedAtAction(nameof(newPost.PostId), savePost);
+            return StatusCode(201, savePost);
         }
 
-        [HttpDelete("deletePost")]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> DeletePost([FromBody] Guid PostId)
+        [HttpDelete("deletePost/{postId}")]
+        public async Task<IActionResult> DeletePost([FromRoute] Guid postId)
         {
-            var deletePost = await _commandRepo.DeletePost(PostId);
+            var deletePost = await _commandRepo.DeletePost(postId);
 
-            if (deletePost == false) {
+            if (!deletePost)
+            {
                 return BadRequest();
             }
 

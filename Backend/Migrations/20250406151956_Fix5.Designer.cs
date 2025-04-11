@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _2K_Matchmaker.Database;
 
@@ -11,9 +12,11 @@ using _2K_Matchmaker.Database;
 namespace _2K_Matchmaker.Migrations
 {
     [DbContext(typeof(_2KMatchmakerDbContext))]
-    partial class _2KMatchmakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250406151956_Fix5")]
+    partial class Fix5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,9 +186,6 @@ namespace _2K_Matchmaker.Migrations
 
                     b.Property<int>("WinPercentage")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("PostId");
 

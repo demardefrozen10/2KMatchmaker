@@ -6,10 +6,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-using RegisterRequest = _2K_Matchmaker.Models.RegisterRequest;
-using LoginRequest = _2K_Matchmaker.Models.LoginRequest;
-using TokenValidationResult = _2K_Matchmaker.Models.TokenValidationResult;
+using RegisterRequest = _2K_Matchmaker.WriteModels.RegisterRequest;
+using LoginRequest = _2K_Matchmaker.WriteModels.LoginRequest;
+using TokenValidationResult = _2K_Matchmaker.ReadModels.TokenValidationResult;
 using Microsoft.EntityFrameworkCore;
+using _2K_Matchmaker.WriteModels;
 
 
 namespace _2K_Matchmaker.CommandRepos
@@ -26,9 +27,13 @@ namespace _2K_Matchmaker.CommandRepos
             _config = config;
         }
 
-        public Task<User> CreateUser(RegisterRequest request)
+        public async Task<User?> CreateUser(RegisterRequest request)
         {
             var hashedPassword = HashPassword(request, request.Password);
+
+            var potentialUser = await _context.Users.FirstOrDefaultAsync(p => p.UserName == request.Username);
+
+            if (potentialUser != null) return null;
 
             var newUser = new User
             {
@@ -38,9 +43,9 @@ namespace _2K_Matchmaker.CommandRepos
                 PasswordHash = hashedPassword
             };
 
-            _context.AddAsync(newUser);
-            _context.SaveChangesAsync();
-            return Task.FromResult(newUser);
+            await _context.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+            return await Task.FromResult(newUser);
 
         }
 
@@ -79,8 +84,8 @@ namespace _2K_Matchmaker.CommandRepos
 
         private TokenValidationResult ValidateJwtToken(string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler(); // ✅ Creates a token handler
-            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]); // ✅ Retrieves the secret key
+            var tokenHandler = new JwtSecurityTokenHandler(); 
+            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
 
             try
             {
@@ -88,7 +93,7 @@ namespace _2K_Matchmaker.CommandRepos
                 {
                     ValidateIssuer = true, 
                     ValidateAudience = true, 
-                    ValidateLifetime = true, 
+                    ValidateLifetime = false, 
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = _config["Jwt:Issuer"],
                     ValidAudience = _config["Jwt:Issuer"], 
@@ -138,7 +143,6 @@ namespace _2K_Matchmaker.CommandRepos
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Issuer"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: credentials
             );
 

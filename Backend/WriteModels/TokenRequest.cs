@@ -1,4 +1,4 @@
-﻿namespace _2K_Matchmaker.Models
+﻿namespace _2K_Matchmaker.WriteModels
 {
     public class TokenRequest
     {

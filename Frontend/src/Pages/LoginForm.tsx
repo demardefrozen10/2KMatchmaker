@@ -47,7 +47,9 @@ export default function LoginForm() {
           });
         }
         else {
-          localStorage.setItem("token", data.token);
+          window.localStorage.setItem("token", data.token);
+          window.dispatchEvent(new Event("token"));
+          localStorage.setItem("username", values.username);
           navigate("/dashboard");
         }
     })

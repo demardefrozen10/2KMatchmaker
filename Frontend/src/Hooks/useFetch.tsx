@@ -16,6 +16,14 @@ export default function useFetch(baseUrl: string) {
         .then (response => response.json())
     }
 
-    return { get, post };
+    function del(url: string) {
+    return fetch(baseUrl + url, {
+        method: "DELETE",
+    }).then((response) => {
+        return response.json();
+    });
+}
+
+    return { get, post, del };
 };
 

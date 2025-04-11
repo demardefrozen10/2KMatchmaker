@@ -32,6 +32,8 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<_2KMatchmakerDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 builder.Services.AddCors(options =>
 {
