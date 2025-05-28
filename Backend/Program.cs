@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using _2K_Matchmaker.Models;
-
+using _2K_Matchmaker.ChatHub;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,15 +35,16 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         policy => policy.WithOrigins("http://localhost:5173")
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials())
+                            
+    ;
 });
-
 
 builder.Services.AddAuthentication(options =>
 {
@@ -56,13 +58,56 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyHere123!")),
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+        ValidateIssuer = true,            
+        ValidIssuer = "nba2kfinder.com", 
+
+        ValidateAudience = true,        
+        ValidAudience = "nba2kfinder.com",
+
+        ValidateLifetime = false,
         ClockSkew = TimeSpan.Zero
     };
+
+    options.Configuration = null;
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            var issue = context.Exception.Message;
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("✅ Token validated!");
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            Console.WriteLine("🔍 Token: " + accessToken);
+            Console.WriteLine("🔍 Path: " + path);
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+
+
+
 });
 
+builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -75,15 +120,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
 app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 
+
 app.UseAuthorization();
 
-app.Run();
+app.MapControllers();
 
+
+
+// Map the SignalR Hub endpoint
+app.MapHub<ChatHub>("/chathub").RequireAuthorization();
+
+app.Run();

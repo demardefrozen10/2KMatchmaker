@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _2K_Matchmaker.Database;
 
@@ -11,9 +12,11 @@ using _2K_Matchmaker.Database;
 namespace _2K_Matchmaker.Migrations
 {
     [DbContext(typeof(_2KMatchmakerDbContext))]
-    partial class _2KMatchmakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250411214405_AddLookingForNumberOfPlayers")]
+    partial class AddLookingForNumberOfPlayers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

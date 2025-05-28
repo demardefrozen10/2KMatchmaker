@@ -14,7 +14,7 @@ namespace _2K_Matchmaker.QueryRepos
             _context = context;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ReadPost>> GetAllSquadPosts(string? gameMode, string? platform)
+        public async Task<IEnumerable<ReadPost>> GetAllSquadPosts(string? gameMode, string? platform, int? playersNeeded, int? minWinPercentage)
         {
             var since = DateTime.UtcNow.AddHours(-24);
 
@@ -29,13 +29,17 @@ namespace _2K_Matchmaker.QueryRepos
             if (!string.IsNullOrWhiteSpace(platform))
                 query = query.Where(p => p.Platform.ToLower() == platform.ToLower());
 
+            if (minWinPercentage.HasValue)
+                query = query.Where(p => p.WinPercentage >= minWinPercentage);
+
+            if (playersNeeded.HasValue)
+                query = query.Where(p => p.playersNeeded == playersNeeded.Value);
 
             var posts = await query.ToListAsync();
 
-            var mappedPosts = _mapper.Map<IEnumerable<ReadPost>>(posts);
-
-            return mappedPosts;
+            return _mapper.Map<IEnumerable<ReadPost>>(posts);
         }
+
 
 
 

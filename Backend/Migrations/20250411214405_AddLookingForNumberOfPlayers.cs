@@ -1,0 +1,29 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace _2K_Matchmaker.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddLookingForNumberOfPlayers : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<int>(
+                name: "playersNeeded",
+                table: "Posts",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "playersNeeded",
+                table: "Posts");
+        }
+    }
+}

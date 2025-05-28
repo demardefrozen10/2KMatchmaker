@@ -16,5 +16,7 @@
 
         public DateTime DatePosted { get; set; }
 
+        public int playersNeeded { get; set; }
+
     }
 }

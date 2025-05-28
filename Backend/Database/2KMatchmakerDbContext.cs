@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using _2K_Matchmaker.Models;
+using _2K_Matchmaker.Entities;
 
 namespace _2K_Matchmaker.Database
 {
@@ -20,6 +21,8 @@ namespace _2K_Matchmaker.Database
         }
 
         public DbSet<SquadPosts> Posts { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
