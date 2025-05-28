@@ -9,6 +9,8 @@ import CreatePost from "@/Pages/CreatePost";
 import { Menu } from "lucide-react";
 import { useEffect } from "react";
 import PostPortal from "../Pages/PostPortal";
+import Chat from "@/Pages/Chat";
+import RealChat from "@/Pages/RealChat";
 
 
 function Navigation() {
@@ -46,6 +48,7 @@ function Navigation() {
           <div className="hidden md:flex gap-2">
             <Link to="/"><Button variant="ghost">Home</Button></Link>
             <Link to="/postportal"><Button variant="ghost">About Us</Button></Link>
+            <Link to="/chat"><Button variant="ghost">Chat</Button></Link>
           </div>
         </div>
 
@@ -107,6 +110,7 @@ function Navigation() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/createpost" element={<CreatePost/>}/>
         <Route path="/postportal" element={<PostPortal/>}/>
+        <Route path="/chat" element={<Chat/>}/>
       </Routes>
     </Router>
     </>

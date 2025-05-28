@@ -33,6 +33,7 @@ export interface CardProps {
   postId: string;
   handleRefreshPosts?: () => void;
   datePosted: string;
+  playersNeeded: number;
 }
 
 import Alert from "@/my-components/Alert";
@@ -60,7 +61,7 @@ export default function CardPost(props: CardProps) {
 
   return (
     <>
-        <Card className="w-xs max-w-sm ml-1 shadow-lg border-2 border-gray-100 hover:shadow-xl transition-shadow duration-300 h-110">
+        <Card className="w-xs max-w-sm ml-1 shadow-lg border-2 border-gray-100 hover:shadow-xl transition-shadow duration-300 h-115">
       <CardHeader className="bg-red-50 pb-2">
         <CardTitle className="text-xl font-bold text-gray-800 m-auto mt-2">Looking for {props.gameMode} game</CardTitle>
         <CardDescription className="text-gray-500"></CardDescription>
@@ -97,6 +98,10 @@ export default function CardPost(props: CardProps) {
               <span className="font-semibold text-gray-600">Date posted:</span>
               <p className="text">{formattedDate}</p>
             </div>
+            <div className="text-sm mt-2 mb-2 flex justify-start items-center gap-1">
+              <span className="font-semibold text-gray-600">Players needed: </span>
+              <p className="text">{props.playersNeeded}</p>
+            </div>
         </div>
         <div className="bg-gray-100 p-2 rounded-md mt-2">
           <p className="text-sm italic text-gray-700">
@@ -105,6 +110,7 @@ export default function CardPost(props: CardProps) {
         </div>
       </CardContent>
       <CardFooter>
+        <Button className="mr-2 w-[100px]">Edit Post</Button>
       <AlertDialog>
   <AlertDialogTrigger><Button className="bg-red-700">Delete Post</Button></AlertDialogTrigger>
   <AlertDialogContent>
@@ -116,7 +122,7 @@ export default function CardPost(props: CardProps) {
     </AlertDialogHeader>
     <AlertDialogFooter>
       <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction className="bg-red-700" onClick={HandleDeletePost}>Delete</AlertDialogAction>
+      <AlertDialogAction className="bg-red-700 w-[100px]" onClick={HandleDeletePost}>Delete</AlertDialogAction>
     </AlertDialogFooter>
   </AlertDialogContent>
 </AlertDialog>

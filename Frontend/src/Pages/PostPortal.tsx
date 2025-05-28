@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider"
 interface FilterParams {
     gameMode?: string;
     platform?: string;
-    build?: string;
+    playersNeeded?: string;
     minWinPercentage?: number;
   }
 
@@ -17,7 +17,7 @@ export default function PostPortal() {
         const [minWinPercentage, setMinWinPercentage] = useState(33);
         const [gameMode, setGameMode] = useState("");
         const [platform, setPlatform] = useState("");
-        const [build, setBuild] = useState("");
+        const [playersNeeded, setplayersNeeded] = useState("");
 
 
     const fetchAllPosts = (filters?: FilterParams) => {
@@ -26,7 +26,6 @@ export default function PostPortal() {
         const queryParams = new URLSearchParams();
         if (filters?.gameMode) queryParams.append("gameMode", filters.gameMode);
         if (filters?.platform) queryParams.append("platform", filters.platform);
-        if (filters?.build) queryParams.append("build", filters.build);
         if (filters?.minWinPercentage) queryParams.append("minWinPercentage", filters.minWinPercentage.toString());
         const queryString = queryParams.toString();
         const endpoint = queryString ? `?${queryString}` : "";
@@ -89,13 +88,13 @@ export default function PostPortal() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Build
                         </label>
-                        <select className="w-full p-2 border rounded-md" onChange={(e) => setBuild(e.target.value)}>
-                            <option value="">All Builds</option>
-                            <option value="PG">PG</option>
-                            <option value="SG">SG</option>
-                            <option value="SF">SF</option>
-                            <option value="PF">PF</option>
-                            <option value="C">C</option>
+                        <select className="w-full p-2 border rounded-md" onChange={(e) => setplayersNeeded(e.target.value)}>
+                            <option value="">Players Needed</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
                         </select>
                     </div>
 
@@ -106,33 +105,38 @@ export default function PostPortal() {
                         <Slider defaultValue={[33]} max={100} step={1} onValueChange={(value) => setMinWinPercentage(value[0])}/>
                     </div>
 
-                    <button onClick={() => fetchAllPosts({gameMode, platform, build, minWinPercentage})} className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                    <button onClick={() => fetchAllPosts({gameMode, platform, playersNeeded, minWinPercentage})} className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
                         Apply Filters
                     </button>
                 </div>
 
                 <div className="flex-1">
                     <div className="bg-gray-50 rounded-lg p-4">
-                        {isLoading ? (
-                            <div className="flex justify-center items-center h-64">
-                                <p className="text-gray-500">Loading posts...</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
-                                {posts.map((post) => (
-                                    <PublicCardPost
-                                        key={post.postId}
-                                        gameMode={post.gameMode}
-                                        platform={post.platform}
-                                        winPercentage={post.winPercentage}
-                                        message={post.message}
-                                        gamertag2K={post.gamertag2K}
-                                        postId={post.postId}
-                                        datePosted={post.datePosted}
-                                    />
-                                ))}
-                            </div>
-                        )}
+                    {isLoading ? 
+    <div className="flex justify-center items-center h-64">
+        <p className="text-gray-500">Loading posts...</p>
+    </div>
+    : posts.length === 0 ?
+        <div className="flex justify-center items-center h-64">
+            <p className="text-gray-500">No posts found.</p>
+        </div>
+        :
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+                <PublicCardPost
+                key={post.postId}
+                gameMode={post.gameMode}
+                platform={post.platform}
+                winPercentage={post.winPercentage}
+                message={post.message}
+                gamertag2K={post.gamertag2K}
+                postId={post.postId}
+                datePosted={post.datePosted}
+                playersNeeded={post.playersNeeded}
+                />
+            ))}
+        </div>
+}
                     </div>
                 </div>
             </div>

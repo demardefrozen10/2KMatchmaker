@@ -165,7 +165,7 @@ export default function CreatePost() {
                     <FormControl>
                       <Select 
                         onValueChange={field.onChange} 
-                        defaultValue={field.value}
+                        defaultValue={String(field.value)}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select Platform" />
@@ -216,7 +216,7 @@ export default function CreatePost() {
                     <FormControl>
                     <Select 
                         onValueChange={(value) => field.onChange(Number(value))}
-                        defaultValue={field.value}
+                        defaultValue={String(field.value)}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select number of players you're looking for" />

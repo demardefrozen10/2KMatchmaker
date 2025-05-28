@@ -104,6 +104,7 @@ export default function Dashboard() {
                   postId={post.postId}
                   handleRefreshPosts={() => handleRefreshPosts()}
                   datePosted={post.datePosted}
+                  playersNeeded={post.playersNeeded}
                 />
               ))}
             </div>

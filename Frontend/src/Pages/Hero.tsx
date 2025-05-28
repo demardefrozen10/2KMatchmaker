@@ -34,8 +34,8 @@ export default function Hero() {
                     <img 
                         src={lebron} 
                         alt="LeBron James"
-                        className="max-w-xs md:max-w-sm"
-                    />
+                        className="max-w-xl md:max-w-md lg:max-w-lg"
+                        />
                 </div>
             </div>
 
