@@ -8,11 +8,11 @@ A web application for NBA 2K25 users who play MyCareer to find other people to p
 - Sign-up/login system with a username/email or use a authorized third party provider (OAuth).
 
 # How it works
-Create A Post
-1. ![image](https://github.com/user-attachments/assets/875a14d7-a744-4638-9b3f-2f91fabdaa08)
+1. Create A Post
+![image](https://github.com/user-attachments/assets/875a14d7-a744-4638-9b3f-2f91fabdaa08)
 
-View your post in our squad finder and wait for others to reach out, or reach out to others yourself.
-2. ![image](https://github.com/user-attachments/assets/944b2da7-553c-4eba-a213-c74c9e7f11f5)
+2. View your post in our squad finder and wait for others to reach out, or reach out to others yourself.
+![image](https://github.com/user-attachments/assets/944b2da7-553c-4eba-a213-c74c9e7f11f5)
 
 # Built With
 https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white
