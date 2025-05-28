@@ -17,11 +17,16 @@ A web application for NBA 2K25 users who play MyCareer to find other people to p
 # Built With
 ![React Badge](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) 
 ![.NET Badge](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Tailwind Badge](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![JWT Badge](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+![Typescript Badge](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
 - Used ASP.NET Core for backend CRUD operations and APIs and React.js and Typescript for frontend components and type safety.
 - Used ASP.NET Core's SignalR libary for real time chat system with user to user, SignalR's main transport type is WebSockets but can fallback to others if it finds it is not the most optimal one.
 - Implemented best authorization and authentication practices using ASP.NET Core Identity libary and JWT tokens.
 
-
+# Installation And Usage
+Currently still work in progress, will be hoping to deploy it soon for real users to try and use.
 
 
 
