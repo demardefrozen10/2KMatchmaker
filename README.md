@@ -3,8 +3,11 @@ A web application for NBA 2K25 users who play MyCareer to find other people to p
 
 # Features
 • Chat in real time with other users to coordinate and play.
+
 • Make catered posts to what kind of players you're looking to play with.
+
 • View posts to see what kind of players others are looking for.
+
 • Sign-up/login system with a username/email or use a authorized third party provider (OAuth).
 
 # How it works
