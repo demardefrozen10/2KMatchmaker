@@ -10,9 +10,7 @@ namespace _2K_Matchmaker.Entities
 
         public required string Content { get; set; }
 
-        public DateTime SentDate { get; set; } = DateTime.UtcNow;
-
-        public required User User { get; set; }
+        public DateTime SentDate { get; set; }
 
     }
 }

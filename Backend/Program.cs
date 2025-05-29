@@ -28,6 +28,8 @@ builder.Services.AddDbContext<_2KMatchmakerDbContext>(options => options.UseSqlS
 builder.Services.AddScoped<ISquadPostsCommandRepo, SquadPostsCommandRepo>();
 builder.Services.AddScoped<ISquadPostsQueryRepo, SquadPostsQueryRepo>();
 builder.Services.AddScoped<IUserCommandRepo, UserCommandRepo>();
+builder.Services.AddScoped<IMessageCommandRepo, MessageCommandRepo>();
+
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<_2KMatchmakerDbContext>()
@@ -53,7 +55,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // Disable for local development
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -81,16 +83,12 @@ builder.Services.AddAuthentication(options =>
         },
         OnTokenValidated = context =>
         {
-            Console.WriteLine("✅ Token validated!");
             return Task.CompletedTask;
         },
         OnMessageReceived = context =>
         {
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
-
-            Console.WriteLine("🔍 Token: " + accessToken);
-            Console.WriteLine("🔍 Path: " + path);
 
             if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
             {
@@ -111,7 +109,6 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -131,7 +128,6 @@ app.MapControllers();
 
 
 
-// Map the SignalR Hub endpoint
 app.MapHub<ChatHub>("/chathub").RequireAuthorization();
 
 app.Run();

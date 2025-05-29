@@ -11,11 +11,16 @@ export default function RealChat() {
     .withUrl('https://localhost:7170/chathub') 
     .build();
 
+    try {
     connection.start();
+    } catch (err) {
+        console.error('Error starting connection:', err);
+    }
     
     connection.on('ReceiveMessage', message => {
         setMessages([message]);
     });
+    
 
     const sendMessage = async () => {
         try {

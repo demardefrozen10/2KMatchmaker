@@ -3,8 +3,8 @@
     public class Message
     {
 
-            public required string FromUserId { get; set; }
-            public required string ToUserId { get; set; }
+            public required string FromUsername { get; set; }
+            public required string ToUsername { get; set; }
             public required string MessageText { get; set; }
         }
     }
