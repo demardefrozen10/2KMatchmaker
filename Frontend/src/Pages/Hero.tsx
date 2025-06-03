@@ -44,7 +44,7 @@ export default function Hero() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                    <UserPlus className="w-12 h-12 text-blue-600 mb-4" />
+                    <UserPlus className="w-12 h-12 text-red-50 mb-4" />
                     <CardTitle>1. Create Account</CardTitle>
                     <CardDescription>
                         Sign up in seconds with your email
@@ -57,7 +57,7 @@ export default function Hero() {
 
                 <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                    <Search className="w-12 h-12 text-blue-600 mb-4" />
+                    <Search className="w-12 h-12 text-red-50 mb-4" />
                     <CardTitle>2. Find Players</CardTitle>
                     <CardDescription>
                         Browse posts or create your own to find teammates
@@ -70,7 +70,7 @@ export default function Hero() {
 
                 <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                    <MessageSquare className="w-12 h-12 text-blue-600 mb-4" />
+                    <MessageSquare className="w-12 h-12 text-red-50 mb-4" />
                     <CardTitle>3. Connect & Play</CardTitle>
                     <CardDescription>
                         Message players and start gaming together

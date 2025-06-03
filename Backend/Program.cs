@@ -13,6 +13,7 @@ using System.Text;
 using _2K_Matchmaker.Models;
 using _2K_Matchmaker.ChatHub;
 using Microsoft.AspNetCore.SignalR;
+using _2K_Matchmaker.IQueryRepos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddScoped<ISquadPostsCommandRepo, SquadPostsCommandRepo>();
 builder.Services.AddScoped<ISquadPostsQueryRepo, SquadPostsQueryRepo>();
 builder.Services.AddScoped<IUserCommandRepo, UserCommandRepo>();
 builder.Services.AddScoped<IMessageCommandRepo, MessageCommandRepo>();
+builder.Services.AddScoped<IMessageQueryRepo, MessageQueryRepo>();
 
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
