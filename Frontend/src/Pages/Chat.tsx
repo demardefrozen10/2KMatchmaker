@@ -1,17 +1,56 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
+import useFetch from "@/Hooks/useFetch";
+import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat/chat-bubble";
+import { ChatMessageList } from "@/components/ui/chat/chat-message-list";
+
+export interface Message {
+    message: string;
+    SentAt: Date;
+    isSent: boolean;
+  }
 
 const ChatComponent: React.FC = () => {
     const [connection, setConnection] = useState<HubConnection | null>(null);
     const [targetUser, setTargetUser] = useState("");
     const [message, setMessage] = useState("");
-    const [chatLog, setChatLog] = useState<string[]>([]);
+    const [chatLog, setChatLog] = useState<Message[]>([]);
+    const [usernames, setUsernames] = useState<string[]>([]);
+
+    const getUsernames = () => {
+        const {get} = useFetch("https://localhost:7170/api/message/recipients/");
+         const username = localStorage.getItem("username")!;
+         try {
+           get(username).then((data: string[]) => {
+           setUsernames(data);
+         })
+       }
+       catch (error) {
+         console.log("error!");
+       }
+ }
+
+ const getChatHistory = (recieverUsername: string) => {
+        const {get} = useFetch("https://localhost:7170/api/message/history/");
+        try {
+            const queryParams = new URLSearchParams();
+            queryParams.append("recipientUsername", recieverUsername);
+            queryParams.append("senderUsername", localStorage.getItem("username")!);
+            const queryString = queryParams.toString();
+            get(`?${queryString}`).then((data: Message[]) => {
+                setChatLog(data);
+                setTargetUser(recieverUsername);
+            });
+        }
+        catch(error) {
+            console.log("error!");
+        }
+ }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
-
-        console.log("Token sent to SignalR:", token);
+        
+        getUsernames();
 
         const newConnection = new HubConnectionBuilder()
             .withUrl("https://localhost:7170/chathub", {
@@ -26,9 +65,12 @@ const ChatComponent: React.FC = () => {
             .then(() => {
                 console.log("Connected to SignalR");
 
-                newConnection.on("ReceiveMessage", (fromUser, msg) => {
-                    console.log(fromUser, msg);
-                    setChatLog(prev => [...prev, `${fromUser}: ${msg}`]);
+                newConnection.on("ReceiveMessage", (message) => {
+                    setChatLog(prev => [...prev, {
+                        message: `${message}`,
+                        SentAt: new Date(),
+                        isSent: false
+                    }]);
                 });
             })
             .catch(err => console.error("SignalR connection error:", err));
@@ -40,13 +82,20 @@ const ChatComponent: React.FC = () => {
         if (connection) {
             try {
                 await connection.invoke("SendPrivateMessage", targetUser, message);
-                setChatLog(prev => [...prev, `You to ${targetUser}: ${message}`]);
+                setChatLog(prev => [...prev, {
+                    message: `${message}`,
+                    SentAt: new Date(),
+                    isSent: true
+                }]);                
                 setMessage("");
             } catch (err) {
                 console.error("Failed to send message:", err);
             }
         }
     };
+
+
+
 
     return (
         <div className="container mx-auto w-full md:w-2/4 h-screen p-2 md:p-4">
@@ -58,15 +107,19 @@ const ChatComponent: React.FC = () => {
                     </div>
                     <div className="divide-y">
                         {/* Chat list items */}
-                        <div className="p-4 hover:bg-gray-50 cursor-pointer">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                                <div>
-                                    <p className="font-medium">{targetUser || "Select User"}</p>
-                                    <p className="text-sm text-gray-500 truncate">Last message...</p>
+                        {usernames.map((username, index) => 
+                                <div key={index} className="p-4 hover:bg-gray-50 cursor-pointer" onClick={() => {
+                                    getChatHistory(username);
+                                }}>
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                                    <div>
+                                        <p className="font-medium">{username}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            
+                        )}    
                     </div>
                 </div>
         
@@ -79,13 +132,21 @@ const ChatComponent: React.FC = () => {
         
                     {/* Messages area */}
                     <div className="flex-1 overflow-y-auto p-3 md:p-4">
-                        {chatLog.map((chat, index) => (
-                            <div key={index} className="mb-3 md:mb-4">
-                                <div className="bg-gray-100 rounded-lg p-2 md:p-3 max-w-[85%] md:max-w-md">
-                                    {chat}
-                                </div>
-                            </div>
-                        ))}
+                    <ChatMessageList>
+                    {chatLog
+                    .map((chat, index) => (
+                        
+                        <ChatBubble key={index} variant={chat.isSent ? 'sent' : 'received'}>
+                            <ChatBubbleAvatar 
+                                fallback={chat.isSent ? 'You' : targetUser?.charAt(0)} 
+                            />
+                            <ChatBubbleMessage variant={chat.isSent ? 'sent' : 'received'}>
+                                {chat.message}
+                            </ChatBubbleMessage>
+                        </ChatBubble>
+                    ))}
+                    </ChatMessageList>
+
                     </div>
         
                     {/* Input area */}

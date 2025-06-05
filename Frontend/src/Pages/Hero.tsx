@@ -9,8 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { UserPlus, Search, MessageSquare } from "lucide-react"
+import { useNavigate } from "react-router"
 
 export default function Hero() {
+    const navigate = useNavigate();
+
     return (
         <div className="flex flex-col items-center">
             <div className="max-w-7xl mx-auto px-4 py-12 bg-stone-50 w-full mt-20 rounded-xl">
@@ -29,7 +32,9 @@ export default function Hero() {
                             <Button variant="outline" size="icon"><Check /></Button>
                             <p className="ml-2 mb-1">Free for all users</p>
                         </div>
-                        <Button variant="outline" className="w-full md:w-auto">Get started today</Button>
+                        <Button variant="outline" className="w-full md:w-auto" onClick={() => {
+                            navigate("/signup");
+                        }}>Get started today</Button>
                     </div>
                     <img 
                         src={lebron} 

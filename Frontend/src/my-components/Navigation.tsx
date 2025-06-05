@@ -47,8 +47,8 @@ function Navigation() {
           <Button variant="link">2K SquadFinder</Button>
           <div className="hidden md:flex gap-2">
             <Link to="/"><Button variant="ghost">Home</Button></Link>
-            <Link to="/postportal"><Button variant="ghost">About Us</Button></Link>
-            <Link to="/chat"><Button variant="ghost">Chat</Button></Link>
+            {isLoggedIn && <Link to="/postportal"><Button variant="ghost">Squad Browser</Button></Link>}
+            {isLoggedIn && <Link to="/chat"><Button variant="ghost">Chat</Button></Link>}
           </div>
         </div>
 

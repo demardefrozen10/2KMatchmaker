@@ -14,10 +14,14 @@ import { format, parseISO } from "date-fns";
   export default function PublicCardPost(props: CardProps) {
     const formattedDate = format(parseISO(props.datePosted), "MMM d, yyyy 'at' h:mm a");
 
+    const HandleMessage = () => {
+      
+    }
+
     return (
       <>
           <Card className="w-xs max-w-sm ml-1 shadow-lg border-2 border-gray-100 hover:shadow-xl transition-shadow duration-300 h-115">
-        <CardHeader className="bg-red-400 pb-2">
+        <CardHeader className="pb-2">
           <CardTitle className="text-xl font-bold text-gray-800 m-auto mt-2">Looking for {props.gameMode} game</CardTitle>
           <CardDescription className="text-gray-500"></CardDescription>
         </CardHeader>
@@ -65,7 +69,7 @@ import { format, parseISO } from "date-fns";
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-        <Button className="w-3xs">Message</Button>
+        <Button className="w-3xs" onClick={HandleMessage}>Message</Button>
         </CardFooter>
       </Card>
       </>

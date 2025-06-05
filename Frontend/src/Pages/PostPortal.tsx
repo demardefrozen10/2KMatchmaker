@@ -51,7 +51,7 @@ export default function PostPortal() {
                 <p className="text-gray-600">Find players that match your playstyle</p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col md:flex-row gap-2">
                 <div className="w-full md:w-64 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <h2 className="text-lg font-semibold mb-4 text-gray-700">Filters</h2>
                     
@@ -105,7 +105,7 @@ export default function PostPortal() {
                         <Slider defaultValue={[33]} max={100} step={1} onValueChange={(value) => setMinWinPercentage(value[0])}/>
                     </div>
 
-                    <button onClick={() => fetchAllPosts({gameMode, platform, playersNeeded, minWinPercentage})} className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                    <button onClick={() => fetchAllPosts({gameMode, platform, playersNeeded, minWinPercentage})} className="w-full bg-red-50 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
                         Apply Filters
                     </button>
                 </div>
@@ -121,7 +121,7 @@ export default function PostPortal() {
             <p className="text-gray-500">No posts found.</p>
         </div>
         :
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex gap-5 flex-wrap md:justify-center md:justify-start">
             {posts.map((post) => (
                 <PublicCardPost
                 key={post.postId}

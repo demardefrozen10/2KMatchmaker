@@ -70,7 +70,7 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold">
             {user ? `Welcome back, ${user.username}` : "Dashboard"}
           </h1>
-          {posts.length === 0 ? <p>Your posts will be shown here when you make one</p> : <p>Here are your current posts</p>}
+          {posts.length === 0 ? <p>Your posts will be shown here when you make one.</p> : <p>Here are your current posts</p>}
           </div>
           <div className="flex space-x-2">
             <Button size="sm" onClick={handleCreateNewPost}>
@@ -92,7 +92,7 @@ export default function Dashboard() {
               <Button onClick={handleCreateNewPost}>Create Your First Post</Button>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex gap-7 flex-wrap">
               {posts.map((post) => (
                 <CardPost
                   key={post.postId}
@@ -106,7 +106,9 @@ export default function Dashboard() {
                   datePosted={post.datePosted}
                   playersNeeded={post.playersNeeded}
                 />
+                
               ))}
+              
             </div>
           )}
         </div>
